@@ -1,0 +1,64 @@
+Chakshu Sardana, Production Quality Software - PS 2 Code Review
+
+  
+01. Author name is missing in the JavaDoc.
+
+02. Package name could be improved, for example, edu.nyu.pqs.addressbook.
+
+03. In AddressBook.java:154, indent is missing
+  
+04. Code has too many unnecessary comments , eg. In AddressBook.java line: 33-35, 42, 52-54, 144-146 etc.; In Address.java line: 9, 12,etc.
+  
+05. In AddressBook.java, JavaDoc for class AddressBook could be improved. It does not mention the functionality supported(add, remove etc.)
+  
+06. In AddressBook.java, instead of explicitly checking for false , use the oprator !, in line: 64, 68, 72 etc. Instead of .containsKey()==false, it's
+    better to do, !.containsKey().
+  
+07. In AddressBook.java, line 25, addresses can be made final to avoid mutability
+
+08. Code doesn't check for NullPointerException which can arise because address can be null. For example, in Addressbook.java:64, 68 etc. 
+  
+09. Inside a method, there are too many newlines. Inside a method, newlines are generally used to separate logical blocks of code, but in this code
+    newlines are used without giving any thought to it. eg In AddressBook.java, line: 139, 153, 162, etc. In general also, too many newlines are used.
+  
+10. Using “this” to access members of the class you are in when there isn’t another variable with the same name in a closer scope is not a good practice ,
+    eg. In AddressBook.java, line:163
+  
+11. In AddressBook.java, JavaDoc for serialize method mentions that it throws JsonGenerationException, JsonMappingException, IOException; but in line 280,
+    JsonMappingException and JsonGenerationException are missing.
+  
+12. In AddressBook.java, instead of separating the braces '{' , '}' as in line 302 and 303; they could be on the same line.
+  
+13. In Address.java, the four parameters (name, postalAddress, phoneNumber, note), they are nowhere checked for null values. There should be a check for
+    null values somewhere, maybe in the constructor or the setters. JavaDoc should mention that null values are also possible.
+
+14. Phone number can be entered in various formats (xxx-xxx-xxxx/(xxx) xxx-xxxx etc.) so there should be some sort of a check for phoneNumber. The JavaDoc
+    for phoneNumber should be descriptive and should mention what it expects in a phoneNumber and how it is handled.
+
+15. There is no mention, if any/all of the four parameters (name, postalAddress, phoneNumber, note) are optional/mandatory. It looks that all four are
+     mandatory, which shouldn't be the case.
+
+16. There are two constructors (Address() and Address(String name, String postalAddress, String phoneNumber, String note)) to create 
+    objects of class Address. 
+    	- Having a public defualt constructor that initalises all four parameters to null is a bad idea as it makes no sense to have a blank entry in the AddressBook. 
+    	- Objects of class Address can be created in a better and more flexible manner by using the Builder pattern (as described in Item 2, Effective Java). 
+
+17. In the AddressBook class, having 4 maps (noteMap, nameMap, postalAddressMap, phoneNumberMap) and an ArrayList of addresses is a bad design 
+    choice because of following reasons:
+    	- A single address is stored in 5 places, this is too memory inefficient.
+    	- Since, a single address is stored in 5 data structures, the address has to be consistent in all of them. There is a strong likelihood of corrupting the data in one or more of these structures.
+    	- This kind of goes against the philosophy of Object Oriented Design Principles. The four parameters(note, name, postal address and phone number) are related to each other and form an object.
+  
+18. The Address class does not have a member for E-mail address.
+
+19. Search in the AddressBook is case sensitive, it should be mentioned in the JavaDoc. 
+
+20. As mentioned in Effective Java(item 10), it is recommended to override toString() method because providing a good toString implementation makes the
+    class much more pleasant to use. In this case, both the classes (Address and AddressBook) are missing the toString() method.
+
+21. In Address.java, equals() method is overloaded (equals(Address address) instead of equals(Object o)). This isn't a good idea because it deviates 
+    from the generally followed practice of overriding equals(). It can lead to confusion. Atleast, the name could have been different. 
+    	- Instead equals() and hashCode() should have been overridden following the guidelines from Item 8, 9 in the book, Effective Java.
+
+22. There is no uniformity in the API design. On one hand, we have addAddress(Address address), addAddress(String name, String postalAddress, 
+    String phoneNumber, String note); on the other for remove, we only have removeAddress(Address address).

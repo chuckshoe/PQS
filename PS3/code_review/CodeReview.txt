@@ -1,0 +1,28 @@
+Chakshu Sardana, Production Quality Software - PS 3 Code Review
+
+StopWatchFactory.java
+
+01. line 18, wrong indentation.
+02. in getStopWatches(), line 51, for reasons mentioned in Effective Java (giving access to own list is not safe) , a new list should have been returned.
+03. Some lines, for example 17, 36 have trailing white space
+04. line 17, stopwatches should have been made final
+05. The Javadoc for getStopwatch() doesn't mention case sensitivity information about id, it would have been better if it was mentioned whether the matching would be case sensitive or not.
+06. It would have been better if stopwatches was a Map instead of List as in this case. The reason being that we clearly wanted a unique id for a particular stopwatch, which is better represented by a Map (id being the key, stopwatch being the value). In getStopwatch(), id is checked but Timer object is pushed, it would have been better to have a Timer object corresponding to this is.
+
+Timer.java
+01. trailing whitespace in lines 15, 20, 22 etc.
+02. toString() is not synchronized, whereas it should have been
+03. There shouldn't be line break between declarations eg. between line 19 and 21   
+04. lines 23-28, javadoc could be improved and be more specific about the type of string that is allowed and not allowed for id.
+05. The javadoc for Timer class could be improved, it doesn't mention the operations supported and that it is a thread safe implementation of Stopwatch
+06. In Timer constructor, id.equals("") || id == null) is not needed as it has been checked in StopwatchFactory.java
+07. In Timer constructor, there is no need to init primitive variables.
+08. In equals(), as mentioned in Effective Java, there are some checks missing, for example, (this == obj) and (!(obj instanceof StopwatchImplementation)).
+09. line 42, this keyword not needed and strings should have been compared equals() instead of ==
+10. toString() should also print laps
+11. hashcode() implementation is incorrect as it uses substring(2), will give same hashcode for this substring id
+12. line 65-69, else not required.
+13. I don't think getStartTime() and setStartTime() is needed. In my opinion, in a stopwatch only laps are needed.
+14. line 113, new list of laptimes should be returned.
+15. checking isRunning() is reset is not needed.
+16. stop lap doesn't check for the first lap case. 
